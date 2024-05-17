@@ -1,0 +1,65 @@
+version: '3'
+services:
+  bot:
+    image: bot_image
+    build: ./bot_image
+    container_name: bot
+    ports:
+      - "5055:5055"
+    depends_on:
+      - db
+      - db_repl
+    networks:
+      - custom_network
+    env_file:
+      - .env
+
+  db:
+    image: db_image
+    build: ./db_image
+    container_name: ${DB_HOST}
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_HOST_AUTH_METHOD=scram-sha-256
+      - DB_DATABASE=${DB_DATABASE}
+    env_file:
+      - .env
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - custom_network
+
+  db_repl:
+    image: db_repl_image
+    build: ./db_repl_image
+    container_name: ${DB_REPL_HOST}
+    ports:
+      - "5434:5432"
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+#      - PGUSER=${DB_REPL_USER}
+#      - PGPASSWORD=${DB_REPL_PASSWORD}
+      - PGDATABASE=${DB_DATABASE}
+    depends_on:
+      - db
+    env_file:
+      - .env
+    networks:
+      - custom_network
+    volumes:
+      - db_repl_data:/var/lib/postgresql/data
+
+volumes:
+  db_data:
+    name: db_data
+  db_repl_data:
+    name: db_repl_data
+
+networks:
+  custom_network:
+    driver: bridge
+    name: custom_network

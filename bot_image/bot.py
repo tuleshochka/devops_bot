@@ -67,7 +67,7 @@ def findPhoneNumbersCommand(update: Update, context):
 
 def findPhoneNumbers (update: Update, context):
     user_input = update.message.text 
-    phoneNumRegex = re.compile(r'(?:^|\b)(?:\+7|8)[-| ]?\(?\d{3}\)?[-| ]?\d{3}[-| ]?\d{2}[-| ]?\d{2}') 
+    phoneNumRegex = re.compile(r'(?:(?:^|\b|(?<=\s))\+7|(?:^|\b)8)[-|\s]?\(?\d{3}\)?[-| ]?\d{3}[-| ]?\d{2}[-| ]?\d{2}') 
     phoneNumberList = phoneNumRegex.findall(user_input)
     logger.info(f"user_input {user_input}")
     logger.info(f"phoneNumberList {phoneNumberList}")

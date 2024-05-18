@@ -77,6 +77,7 @@ def findPhoneNumbers (update: Update, context):
         phoneNumbers += f'{i+1}. {phoneNumberList[i]}\n'
     update.message.reply_text(phoneNumbers) 
     update.message.reply_text('Записать найденные телефонные номера в базу данных?')
+    print("phoneNumberList", phoneNumberList)
     context.user_data["data"] = phoneNumberList
     context.user_data["table"] = 'phone_numbers'
     context.user_data["column"] = 'phone'
@@ -228,7 +229,9 @@ def insertData(update: Update, context):
     if user_input == "да" or user_input == "yes" or user_input == "Да" or user_input == "Yes": 
         try:
             cursor = connection.cursor()
+            print("data",len(data))
             for i in range(len(data)):
+                print(data[i])
                 cursor.execute(f"INSERT INTO {table} ({column}) VALUES ('{data[i]}');")
             update.message.reply_text('Данные записаны успешно')
             return ConversationHandler.END

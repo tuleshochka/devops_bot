@@ -30,7 +30,7 @@ wal_log_hints = on \n\
 log_replication_commands = on \n\
 EOF\n\
 cat <<EOF > /etc/postgresql/pg_hba.conf \n\
-local all ${DB_USER} peer \n\
+host all all peer \n\
 host all all 0.0.0.0/0 password \n\
 host replication ${DB_REPL_USER} ${DB_REPL_HOST}.custom_network md5 \n\
 EOF\n\

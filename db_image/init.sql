@@ -15,5 +15,5 @@ CREATE TABLE  emails (id SERIAL PRIMARY KEY, email VARCHAR(100) NOT NULL);
 
 INSERT INTO emails (email) VALUES ('test@test.ru');
 INSERT INTO emails (email) VALUES ('test_2@test.ru');
-INSERT INTO phone_numbers (phone) VALUES ('dsd@ds.d');
-INSERT INTO phone_numbers (phone) VALUES ('dsd_test@ds.d');
+INSERT INTO phone_numbers (phone) VALUES ('80000000000');
+INSERT INTO phone_numbers (phone) VALUES ('+7(000)000-00-00');

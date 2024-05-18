@@ -52,6 +52,7 @@ def start(update: Update, context):
     logging.debug(f'start({update})')
     user = update.effective_user
     update.message.reply_text(f'Привет {user.full_name}!')
+    logger.info(f'User {user.full_name} started bot')
 
 def helpCommand(update: Update, context):
     logging.debug(f'help({update})')
@@ -61,6 +62,7 @@ def helpCommand(update: Update, context):
 
 def findPhoneNumbersCommand(update: Update, context):
     logging.debug(f'findPhoneNumbers({update})')
+    logger.info(f"/find_emails command executed")
     update.message.reply_text('Введите текст для поиска телефонных номеров: ')
     return 'findPhoneNumbers'
 
@@ -76,7 +78,7 @@ def findPhoneNumbers (update: Update, context):
     for i in range(len(phoneNumberList)):
         phoneNumbers += f'{i+1}. {phoneNumberList[i]}\n'
     update.message.reply_text(phoneNumbers) 
-    update.message.reply_text('Записать найденные телефонные номера в базу данных?')
+    update.message.reply_text('Записать найденные телефонные номера в базу данных? да/нет')
     logger.info(f"phoneNumberList {phoneNumberList}")
     context.user_data["data"] = phoneNumberList
     context.user_data["table"] = 'phone_numbers'
@@ -87,6 +89,7 @@ def findPhoneNumbers (update: Update, context):
 
 def findEmailCommand(update: Update, context):
     logging.debug(f'findEmailCommand({update})')
+    logger.info(f"/find_phone_numbers command executed")
     update.message.reply_text('Введите текст для поиска Email адресов: ')
     return 'findEmail'
 
@@ -101,7 +104,7 @@ def findEmail (update: Update, context):
     for i in range(len(emailList)):
         emails += f'{i+1}. {emailList[i]}\n' 
     update.message.reply_text(emails) 
-    update.message.reply_text('Записать найденные Email в базу данных?')
+    update.message.reply_text('Записать найденные Email в базу данных? да/нет')
     context.user_data["data"] = emailList
     context.user_data["table"] = 'emails'
     context.user_data["column"] = 'email'
@@ -116,6 +119,7 @@ def checkPasswordCommand(update: Update, context):
 
 def checkPassword (update: Update, context):
     user_input = update.message.text 
+    logger.info(f'Password verification command was execured with password {user_input}')
     passwordRegex = re.compile(r'(?=.*[0-9])(?=.*[!@#$%^&*()])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*()]{8,}') 
     passwordList = passwordRegex.findall(user_input)
     if not passwordList: 
@@ -129,50 +133,62 @@ def checkPassword (update: Update, context):
 
 def getRelease(update: Update, context):
     logging.debug(f'getRelease({update})')
-    return update.message.reply_text(monitoringFunc("cat /etc/*-release")) 
+    logger.info(f"/get_release was executed")
+    return update.message.reply_text(monitoringFunc("lsb_release -a")) 
 
 def getUname(update: Update, context):
     logging.debug(f'getUname({update})')
+    logger.info(f"/get_uname was executed")
     return update.message.reply_text(monitoringFunc("uname -a")) 
 
 def getUptime(update: Update, context):
     logging.debug(f'getUptime({update})')
+    logger.info(f"/get_uptime was executed")
     return update.message.reply_text(monitoringFunc("uptime -p")) 
 
 def getDF(update: Update, context):
     logging.debug(f'getDF({update})')
+    logger.info(f"/get_df was executed")
     return update.message.reply_text(monitoringFunc("df -h")) 
 
 def getFree(update: Update, context):
     logging.debug(f'getFree({update})')
+    logger.info(f"/get_free was executed")
     return update.message.reply_text(monitoringFunc("free -h -w")) 
     
 def getMpstat(update: Update, context):
     logging.debug(f'getMpstat({update})')
-    return update.message.reply_text(monitoringFunc("mpstat")) 
+    logger.info(f"/get_mpstat was executed")
+    return update.message.reply_text(monitoringFunc("mpstat | head -n 5")) 
 
 def getW(update: Update, context):
     logging.debug(f'getW({update})')
+    logger.info(f"/get_w was executed")
     return update.message.reply_text(monitoringFunc("w")) 
 
 def getAuths(update: Update, context):
     logging.debug(f'getAuths({update})')
+    logger.info(f"/get_auths was executed")
     return update.message.reply_text(monitoringFunc("last -n 10")) 
 
 def getCritical(update: Update, context):
     logging.debug(f'getCritical({update})')
-    return update.message.reply_text(monitoringFunc("journalctl -n 5 -p crit")) 
+    logger.info(f"/get_critical was executed")
+    return update.message.reply_text(monitoringFunc("journalctl -n 5 -p 2")) 
 
 def getPS(update: Update, context):
     logging.debug(f'getPS({update})')
-    return update.message.reply_text(monitoringFunc("ps")) 
+    logger.info(f"/get_ps was executed")
+    return update.message.reply_text(monitoringFunc("ps aux | head -n 5")) 
 
 def getSS(update: Update, context):
     logging.debug(f'getSS({update})')
-    return update.message.reply_text(monitoringFunc("ss -lntu")) 
+    logger.info(f"/get_ss was executed")
+    return update.message.reply_text(monitoringFunc("ss -tulwn")) 
 
 def getAptListCommand(update: Update, context):
     logging.debug(f'getAptListCommand({update})')
+    logger.info(f"/get_apt_list was executed")
     update.message.reply_text('Введите all для вывода списка всех пакетов или название пакета для просмотра\
          подробной информации о нем: ')
     return 'getAptList'
@@ -180,24 +196,27 @@ def getAptListCommand(update: Update, context):
 def getAptList (update: Update, context):
     user_input = update.message.text 
     if user_input == "all": 
-        update.message.reply_text(monitoringFunc("apt list --installed | head -n 50"))
+        update.message.reply_text(monitoringFunc("apt list --installed | head -n 10"))
         return ConversationHandler.END
     else:
-        update.message.reply_text(monitoringFunc('apt show '+str(user_input)))
+        update.message.reply_text(monitoringFunc('apt list '+str(user_input)))
         return ConversationHandler.END 
 
 def getServices(update: Update, context):
     logging.debug(f'getServices({update})')
-    return update.message.reply_text(monitoringFunc("service --status-all")) 
+    logger.info(f"get_services was executed")
+    return update.message.reply_text(monitoringFunc("systemctl list-units --type=service | head -n 10")) 
 
 def getReplLogs(update: Update, context):
     logging.debug(f'getReplLogs({update})')
-    return update.message.reply_text(monitoringFunc("docker logs pt_start_db_1 -n 10 2>&1 | grep repl")) 
+    logger.info(f"/get_repl_logs was executed")
+    return update.message.reply_text(monitoringFunc("cat /var/log/postgresql/postgresql.log | grep repl | tail -n 10")) 
 #-----------------------POSTGRESQL---------------------
 
 def getEmails(update: Update, context):
     connection = connectToDB()
     logging.debug(f'getEmails({update})')
+    logger.info(f"/get_emails was executed")
     cursor = connection.cursor()
     cursor.execute("SELECT email FROM emails;")
     data = cursor.fetchall()
@@ -212,6 +231,7 @@ def getEmails(update: Update, context):
 def getPhones(update: Update, context):
     connection = connectToDB()
     logging.debug(f'getPhones({update})')
+    logger.info(f"/get_phones was executed")
     cursor = connection.cursor()
     cursor.execute("SELECT phone FROM phone_numbers;")
     data = cursor.fetchall()

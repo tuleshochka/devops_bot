@@ -45,7 +45,6 @@ def monitoringFunc(query):
     stdin, stdout, stderr = client.exec_command(str(query))
     data = stdout.read().decode()
     client.close()
-    #data = str(data).replace('\\n', '\n').replace('\\t', '\t')[2:-1]
     return data
 
 def start(update: Update, context):
@@ -68,7 +67,7 @@ def findPhoneNumbersCommand(update: Update, context):
 
 def findPhoneNumbers (update: Update, context):
     user_input = update.message.text 
-    phoneNumRegex = re.compile(r'\+7[ -]?\(?\d{3}\)?[ -]?\d{3}[ -]?\d{2}[ -]?\d{2}|\+7[ -]?\d{10}|\+7[ -]?\d{3}[ -]?\d{3}[ -]?\d{4}|8[ -]?\(?\d{3}\)?[ -]?\d{3}[ -]?\d{2}[ -]?\d{2}|8[ -]?\d{10}|8[ -]?\d{3}[ -]?\d{3}[ -]?\d{4}') 
+    phoneNumRegex = re.compile(r'(?:^|\b)(?:\+7|8)[-| ]?\(?\d{3}\)?[-| ]?\d{3}[-| ]?\d{2}[-| ]?\d{2}') 
     phoneNumberList = phoneNumRegex.findall(user_input)
     
     if not phoneNumberList:
@@ -94,7 +93,7 @@ def findEmailCommand(update: Update, context):
 
 def findEmail (update: Update, context):
     user_input = update.message.text 
-    emailRegex = re.compile(r'([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)') 
+    emailRegex = re.compile(r'^(?!.*?\.\.+)[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.[A-Za-z]{2,}+\.[A-Za-z]{2,}') 
     emailList = emailRegex.findall(user_input)
     if not emailList: 
         update.message.reply_text('Email адреса не найдены')
@@ -263,8 +262,11 @@ def insertData(update: Update, context):
             cursor = connection.cursor()
             cursor.execute(f"SELECT {column} FROM {table};")
             entries = cursor.fetchall()
+            entries_new = []
             for i in range(len(data)):
-                if data[i] in entries:
+                entries_new.append(data[i][0])
+            for i in range(len(data)):
+                if data[i] in entries_new:
                     update.message.reply_text(f"{data[i]} уже есть в базе данных, пропускается")
                 else:
                     cursor.execute(f"INSERT INTO {table} ({column}) VALUES ('{data[i]}');")
@@ -277,6 +279,8 @@ def insertData(update: Update, context):
             logging.error("Ошибка при работе с PostgreSQL: %s", error)
             update.message.reply_text('Произошла ошибка при записи данных')
             return ConversationHandler.END
+    elif user_input == "no" or user_input == "No" or user_input == "нет" or user_input == "Нет":
+        return ConversationHandler.END
     else:
         update.message.reply_text("Введите да или нет")
         return 'insertData'

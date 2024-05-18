@@ -73,7 +73,12 @@ def findPhoneNumbers (update: Update, context):
     logger.info(f"phoneNumberList {phoneNumberList}")
     phoneNumberList_ = []
     for number in phoneNumberList:
-        phoneNumberList_.append(number.replace(" ","").replace("-","").replace("(","").replace(")",""))
+        n = number.replace(" ","").replace("-","").replace("(","").replace(")","")
+        if len(n) == 12:
+            n = n[2:]
+        else:
+            n = n[1:] 
+        phoneNumberList_.append(n)
     phoneNumberList_ = list(set(phoneNumberList_))
     if not phoneNumberList_:
         update.message.reply_text('Телефонные номера не найдены')

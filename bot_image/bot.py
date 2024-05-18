@@ -68,7 +68,7 @@ def findPhoneNumbersCommand(update: Update, context):
 def findPhoneNumbers (update: Update, context):
     user_input = update.message.text 
     phoneNumRegex = re.compile(r'(?:^|\b)(?:\+7|8)[-| ]?\(?\d{3}\)?[-| ]?\d{3}[-| ]?\d{2}[-| ]?\d{2}') 
-    phoneNumberList = set(phoneNumRegex.findall(user_input))
+    phoneNumberList = list(set(phoneNumRegex.findall(user_input)))
     
     if not phoneNumberList:
         update.message.reply_text('Телефонные номера не найдены')
@@ -94,7 +94,7 @@ def findEmailCommand(update: Update, context):
 def findEmail (update: Update, context):
     user_input = update.message.text 
     emailRegex = re.compile(r'^(?!.*?\.\.+)[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.[A-Za-z]{2,}+\.[A-Za-z]{2,}') 
-    emailList = set(emailRegex.findall(user_input))
+    emailList = list(set(emailRegex.findall(user_input)))
     if not emailList: 
         update.message.reply_text('Email адреса не найдены')
         return ConversationHandler.END 

@@ -13,6 +13,8 @@ services:
       - custom_network
     env_file:
       - .env
+    volumes:
+      - pg_logs:/var/log/
 
   db:
     image: db_image
@@ -29,6 +31,7 @@ services:
       - .env
     volumes:
       - db_data:/var/lib/postgresql/data
+      - pg_logs:/var/log/
     networks:
       - custom_network
 
@@ -41,8 +44,6 @@ services:
     environment:
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
-#      - PGUSER=${DB_REPL_USER}
-#      - PGPASSWORD=${DB_REPL_PASSWORD}
       - PGDATABASE=${DB_DATABASE}
     depends_on:
       - db
@@ -58,6 +59,7 @@ volumes:
     name: db_data
   db_repl_data:
     name: db_repl_data
+  pg_logs:
 
 networks:
   custom_network:

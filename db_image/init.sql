@@ -10,10 +10,10 @@ END $$;
 \c ${DB_DATABASE}
 DROP TABLE IF EXISTS emails;
 DROP TABLE IF EXISTS phone_numbers;
-CREATE TABLE  phone_numbers (id SERIAL PRIMARY KEY, phone VARCHAR(255));
-CREATE TABLE  emails (id SERIAL PRIMARY KEY, email VARCHAR(255));
+CREATE TABLE  phone_numbers (id SERIAL PRIMARY KEY, phone VARCHAR(30) NOT NULL);
+CREATE TABLE  emails (id SERIAL PRIMARY KEY, email VARCHAR(100) NOT NULL);
 
-INSERT INTO emails (email) VALUES ('test@test.ru') ON conflict (email) DO nothing;
-INSERT INTO emails (email) VALUES ('test_2@test.ru') ON conflict (email) DO nothing;
-INSERT INTO phone_numbers (phone) VALUES ('dsd@ds.d') ON conflict (phone) DO nothing;
-INSERT INTO phone_numbers (phone) VALUES ('dsd_test@ds.d') ON conflict (phone) DO nothing;
+INSERT INTO emails (email) VALUES ('test@test.ru');
+INSERT INTO emails (email) VALUES ('test_2@test.ru');
+INSERT INTO phone_numbers (phone) VALUES ('dsd@ds.d');
+INSERT INTO phone_numbers (phone) VALUES ('dsd_test@ds.d');

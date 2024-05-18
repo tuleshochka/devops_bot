@@ -263,8 +263,8 @@ def insertData(update: Update, context):
             cursor.execute(f"SELECT {column} FROM {table};")
             entries = cursor.fetchall()
             entries_new = []
-            for i in range(len(data)):
-                entries_new.append(data[i][0])
+            for i in range(len(entries)):
+                entries_new.append(entries[i][0])
             logger.info(f"data {data}")
             logger.info(f"entries_new {entries_new}")
             for i in range(len(data)):

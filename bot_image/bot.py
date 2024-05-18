@@ -205,6 +205,8 @@ def getEmails(update: Update, context):
     for i in range(len(data)):
         entries += f'{i+1}. {data[i][0]}\n' 
     update.message.reply_text(entries) 
+    cursor.close()
+    connection.close() 
     return 
 
 def getPhones(update: Update, context):
@@ -216,7 +218,9 @@ def getPhones(update: Update, context):
     entries = '' 
     for i in range(len(data)):
         entries += f'{i+1}. {data[i][0]}\n' 
-    update.message.reply_text(entries) 
+    update.message.reply_text(entries)
+    cursor.close()
+    connection.close() 
     return
 
 def insertData(update: Update, context):
@@ -233,6 +237,9 @@ def insertData(update: Update, context):
             for i in range(len(data)):
                 logger.info(f"data i {data[i]}")
                 cursor.execute(f"INSERT INTO {table} ({column}) VALUES ('{data[i]}');")
+            cursor.close()
+            connection.commit()
+            connection.close()
             update.message.reply_text('Данные записаны успешно')
             return ConversationHandler.END
         except (Exception, Error) as error:

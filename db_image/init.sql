@@ -13,7 +13,7 @@ DROP TABLE IF EXISTS phone_numbers;
 CREATE TABLE  phone_numbers (id SERIAL PRIMARY KEY, phone VARCHAR(255));
 CREATE TABLE  emails (id SERIAL PRIMARY KEY, email VARCHAR(255));
 
-INSERT INTO emails (id, email) VALUES (1, 'test@test.ru') ON conflict (id) DO nothing;
-INSERT INTO emails (id, email) VALUES (2, 'test_2@test.ru') ON conflict (id) DO nothing;
-INSERT INTO phone_numbers (id, phone) VALUES (1, 'dsd@ds.d') ON conflict (id) DO nothing;
-INSERT INTO phone_numbers (id, phone) VALUES (2, 'dsd_test@ds.d') ON conflict (id) DO nothing;
+INSERT INTO emails (email) VALUES ('test@test.ru') ON conflict (email) DO nothing;
+INSERT INTO emails (email) VALUES ('test_2@test.ru') ON conflict (email) DO nothing;
+INSERT INTO phone_numbers (phone) VALUES ('dsd@ds.d') ON conflict (phone) DO nothing;
+INSERT INTO phone_numbers (phone) VALUES ('dsd_test@ds.d') ON conflict (phone) DO nothing;

@@ -30,7 +30,8 @@ wal_log_hints = on \n\
 log_replication_commands = on \n\
 EOF\n\
 cat <<EOF > /etc/postgresql/pg_hba.conf \n\
-local   all             all                                     peer \n\
+local   all             postgres                                     peer \n\
+local   all             all                                     scram-sha-256 \n\
 host    all  all  127.0.0.1/32                      scram-sha-256 \n\
 host    all  all    ::1/128                             scram-sha-256 \n\
 local   replication     all                            peer \n\

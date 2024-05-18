@@ -6,7 +6,6 @@ RUN apt-get install gettext-base
 
 # Creating dirs for archives
 COPY ./init.sql /docker-entrypoint-initdb.d/init.sql.raw
-RUN mkdir -p /etc/postgresql/
 RUN mkdir -p /oracle/pg_data/archive/
 RUN chown postgres:postgres /oracle/pg_data/archive/
 
@@ -41,7 +40,5 @@ host all all 0.0.0.0/0 password \n\
 host replication ${DB_REPL_USER} ${DB_REPL_HOST}.custom_network md5 \n\
 EOF\n\
 docker-entrypoint.sh $@"]
-# Run entry point script
 
-# Run postgresql server wirh changed config files
 CMD ["postgres", "-c", "config_file=/etc/postgresql/postgresql.conf", "-c", "hba_file=/etc/postgresql/pg_hba.conf" ]

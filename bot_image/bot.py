@@ -31,7 +31,6 @@ def connectToDB():
 logger = logging.getLogger(__name__)
 
 TOKEN = os.getenv('TOKEN')
-print(TOKEN)
 
 # Функции paramiko для работы с удаленным сервером 
 def monitoringFunc(query):
@@ -80,7 +79,6 @@ def findPhoneNumbers (update: Update, context):
         phoneNumbers += f'{i+1}. {phoneNumberList[i]}\n'
     update.message.reply_text(phoneNumbers) 
     update.message.reply_text('Записать найденные телефонные номера в базу данных? да/нет')
-    logger.info(f"phoneNumberList {phoneNumberList}")
     context.user_data["data"] = phoneNumberList
     context.user_data["table"] = 'phone_numbers'
     context.user_data["column"] = 'phone'
@@ -256,13 +254,10 @@ def insertData(update: Update, context):
     data = context.user_data["data"]
     table = context.user_data["table"]
     column = context.user_data["column"]
-    print(user_input)
     if user_input == "да" or user_input == "yes" or user_input == "Да" or user_input == "Yes": 
         try:
             cursor = connection.cursor()
-            logger.info(f"data {data}")
             for i in range(len(data)):
-                logger.info(f"data i {data[i]}")
                 cursor.execute(f"INSERT INTO {table} ({column}) VALUES ('{data[i]}');")
             cursor.close()
             connection.commit()

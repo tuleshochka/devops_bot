@@ -4,8 +4,6 @@ services:
     image: bot_image
     build: ./bot_image
     container_name: bot
-    ports:
-      - "5055:5055"
     depends_on:
       - db
       - db_repl
@@ -20,8 +18,6 @@ services:
     image: db_image
     build: ./db_image
     container_name: ${DB_HOST}
-    ports:
-      - "5432:5432"
     environment:
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
@@ -39,8 +35,6 @@ services:
     image: db_repl_image
     build: ./db_repl_image
     container_name: ${DB_REPL_HOST}
-    ports:
-      - "5434:5432"
     environment:
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}

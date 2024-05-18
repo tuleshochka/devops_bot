@@ -199,13 +199,13 @@ def getAptList (update: Update, context):
         update.message.reply_text(monitoringFunc("apt list --installed | head -n 10"))
         return ConversationHandler.END
     else:
-        update.message.reply_text(monitoringFunc('apt list '+str(user_input)))
+        update.message.reply_text(monitoringFunc('apt show '+str(user_input)))
         return ConversationHandler.END 
 
 def getServices(update: Update, context):
     logging.debug(f'getServices({update})')
     logger.info(f"get_services was executed")
-    return update.message.reply_text(monitoringFunc("systemctl list-units --type=service | head -n 10")) 
+    return update.message.reply_text(monitoringFunc("systemctl --type=service --state=running | head -n 10")) 
 
 def getReplLogs(update: Update, context):
     logging.debug(f'getReplLogs({update})')

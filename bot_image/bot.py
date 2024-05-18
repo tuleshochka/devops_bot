@@ -68,17 +68,20 @@ def findPhoneNumbersCommand(update: Update, context):
 def findPhoneNumbers (update: Update, context):
     user_input = update.message.text 
     phoneNumRegex = re.compile(r'(?:^|\b)(?:\+7|8)[-| ]?\(?\d{3}\)?[-| ]?\d{3}[-| ]?\d{2}[-| ]?\d{2}') 
-    phoneNumberList = list(set(phoneNumRegex.findall(user_input)))
-    
-    if not phoneNumberList:
+    phoneNumberList = phoneNumRegex.findall(user_input)
+    phoneNumberList_ = []
+    for number in phoneNumberList:
+        phoneNumberList_.append(number.replace(" ","").replace("-","").replace("(","").replace(")",""))
+    phoneNumberList_ = list(set(phoneNumberList_))
+    if not phoneNumberList_:
         update.message.reply_text('Телефонные номера не найдены')
         return ConversationHandler.END 
     phoneNumbers = '' 
-    for i in range(len(phoneNumberList)):
-        phoneNumbers += f'{i+1}. {phoneNumberList[i]}\n'
+    for i in range(len(phoneNumberList_)):
+        phoneNumbers += f'{i+1}. {phoneNumberList_[i]}\n'
     update.message.reply_text(phoneNumbers) 
     update.message.reply_text('Записать найденные телефонные номера в базу данных? да/нет')
-    context.user_data["data"] = phoneNumberList
+    context.user_data["data"] = phoneNumberList_
     context.user_data["table"] = 'phone_numbers'
     context.user_data["column"] = 'phone'
     return 'insertData'

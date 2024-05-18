@@ -194,11 +194,15 @@ def getAptListCommand(update: Update, context):
 
 def getAptList (update: Update, context):
     user_input = update.message.text 
-    if user_input == "all": 
+    if user_input == "all":
         update.message.reply_text(monitoringFunc("apt list --installed | head -n 10"))
         return ConversationHandler.END
     else:
-        update.message.reply_text(monitoringFunc('apt show '+str(user_input)))
+        data = monitoringFunc('apt show '+str(user_input))
+        if data:
+            update.message.reply_text(data)
+        else:
+            update.message.reply_text("Такой пакет не найден")
         return ConversationHandler.END 
 
 def getServices(update: Update, context):
@@ -257,8 +261,13 @@ def insertData(update: Update, context):
     if user_input == "да" or user_input == "yes" or user_input == "Да" or user_input == "Yes": 
         try:
             cursor = connection.cursor()
+            cursor.execute(f"SELECT {column} FROM {table};")
+            entries = cursor.fetchall()
             for i in range(len(data)):
-                cursor.execute(f"INSERT INTO {table} ({column}) VALUES ('{data[i]}');")
+                if data[i] in entries:
+                    update.message.reply_text(f"{data[i]} уже есть в базе данных, пропускается")
+                else:
+                    cursor.execute(f"INSERT INTO {table} ({column}) VALUES ('{data[i]}');")
             cursor.close()
             connection.commit()
             connection.close()
@@ -269,7 +278,8 @@ def insertData(update: Update, context):
             update.message.reply_text('Произошла ошибка при записи данных')
             return ConversationHandler.END
     else:
-        return ConversationHandler.END
+        update.message.reply_text("Введите да или нет")
+        return 'insertData'
 
 def echo(update: Update, context):
     update.message.reply_text(update.message.text)

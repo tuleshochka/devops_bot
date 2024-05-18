@@ -43,7 +43,7 @@ def monitoringFunc(query):
     client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     client.connect(hostname=host, username=username, password=password, port=port)
     stdin, stdout, stderr = client.exec_command(str(query))
-    data = stdout.read() + stderr.read()
+    data = stdout.read().decode()
     client.close()
     data = str(data).replace('\\n', '\n').replace('\\t', '\t')[2:-1]
     return data

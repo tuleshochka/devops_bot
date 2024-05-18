@@ -93,7 +93,7 @@ def findEmailCommand(update: Update, context):
 
 def findEmail (update: Update, context):
     user_input = update.message.text 
-    emailRegex = re.compile(r'(?:^|\b)(?!.*?\.\.+)[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.[A-Za-z]{2,}+(?:\.[A-Za-z]{2,}|)') 
+    emailRegex = re.compile(r'(?:^|\b)(?!.*?\.\.+)[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.[A-Za-z]{2,}(?:\.[A-Za-z]{2,}|)') 
     emailList = list(set(emailRegex.findall(user_input)))
     if not emailList: 
         update.message.reply_text('Email адреса не найдены')

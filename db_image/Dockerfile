@@ -17,6 +17,7 @@ envsubst < /docker-entrypoint-initdb.d/init.sql.raw > /docker-entrypoint-initdb.
 cat <<EOF > /etc/postgresql/postgresql.conf \n\
 listen_addresses = '*' \n\
 port = ${DB_PORT} \n\
+log_destination = 'stderr' \n\
 logging_collector = on \n\
 log_directory = '/var/log/postgresql/' \n\
 log_filename = 'postgresql.log' \n\

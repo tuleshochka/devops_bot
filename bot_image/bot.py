@@ -19,12 +19,13 @@ logging.basicConfig(
     filename='logfile.txt', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO
 )
 
-connection = None
 def connectToDB():
+    connection = None
     try:
         connection = psycopg2.connect(user=os.getenv('DB_USER'),password=os.getenv('DB_PASSWORD'),host=os.getenv('DB_HOST'),port=os.getenv('DB_PORT'), database=os.getenv('DB_DATABASE'))
     except (Exception, Error) as error:
         logging.debug("Ошибка при работе с PostgreSQL: %s", error)
+    return connection
 
 logger = logging.getLogger(__name__)
 
@@ -65,7 +66,7 @@ def findPhoneNumbersCommand(update: Update, context):
 
 def findPhoneNumbers (update: Update, context):
     user_input = update.message.text 
-    phoneNumRegex = re.compile(r'[8|\+7] ?\(?\d{3}\)? ?\d{3}[-| ]?\d{2}[-| ]?\d{2}') 
+    phoneNumRegex = re.compile(r'\+7[ -]?\(?\d{3}\)?[ -]?\d{3}[ -]?\d{2}[ -]?\d{2}|\+7[ -]?\d{10}|\+7[ -]?\d{3}[ -]?\d{3}[ -]?\d{4}|8[ -]?\(?\d{3}\)?[ -]?\d{3}[ -]?\d{2}[ -]?\d{2}|8[ -]?\d{10}|8[ -]?\d{3}[ -]?\d{3}[ -]?\d{4}') 
     phoneNumberList = phoneNumRegex.findall(user_input)
     
     if not phoneNumberList:
@@ -194,8 +195,7 @@ def getReplLogs(update: Update, context):
 #-----------------------POSTGRESQL---------------------
 
 def getEmails(update: Update, context):
-    if connection == None:
-        connectToDB()
+    connection = connectToDB()
     logging.debug(f'getEmails({update})')
     cursor = connection.cursor()
     cursor.execute("SELECT email FROM emails;")
@@ -207,8 +207,7 @@ def getEmails(update: Update, context):
     return 
 
 def getPhones(update: Update, context):
-    if connection == None:
-        connectToDB()
+    connection = connectToDB()
     logging.debug(f'getPhones({update})')
     cursor = connection.cursor()
     cursor.execute("SELECT phone FROM phone_numbers;")
@@ -220,8 +219,7 @@ def getPhones(update: Update, context):
     return
 
 def insertData(update: Update, context):
-    if connection == None:
-        connectToDB()
+    connection = connectToDB()
     user_input = update.message.text
     data = context.user_data["data"]
     table = context.user_data["table"]

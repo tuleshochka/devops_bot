@@ -45,7 +45,7 @@ def monitoringFunc(query):
     stdin, stdout, stderr = client.exec_command(str(query))
     data = stdout.read().decode()
     client.close()
-    data = str(data).replace('\\n', '\n').replace('\\t', '\t')[2:-1]
+    #data = str(data).replace('\\n', '\n').replace('\\t', '\t')[2:-1]
     return data
 
 def start(update: Update, context):

@@ -78,7 +78,8 @@ def findPhoneNumbers (update: Update, context):
             n = n[2:]
         else:
             n = n[1:] 
-        phoneNumberList_.append(n)
+        st = "+7"+ n
+        phoneNumberList_.append(st)
     phoneNumberList_ = list(set(phoneNumberList_))
     if not phoneNumberList_:
         update.message.reply_text('Телефонные номера не найдены')

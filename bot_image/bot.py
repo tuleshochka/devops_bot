@@ -265,6 +265,8 @@ def insertData(update: Update, context):
             entries_new = []
             for i in range(len(data)):
                 entries_new.append(data[i][0])
+            logger.info(f"data {data}")
+            logger.info(f"entries_new {entries_new}")
             for i in range(len(data)):
                 if data[i] in entries_new:
                     update.message.reply_text(f"{data[i]} уже есть в базе данных, пропускается")

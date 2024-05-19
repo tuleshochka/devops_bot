@@ -225,10 +225,7 @@ def getReplLogs(update: Update, context):
     logger.info(f"/get_repl_logs was executed")
     command = "cat /var/log/postgresql/postgresql.log | grep repl | tail -n 15" 
     res = subprocess.run(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    if res.returncode != 0 or res.stderr.decode() != "":
-        return update.message.reply_text(monitoringFunc("cat /var/log/postgresql/postgresql.log | grep repl | tail -n 10"))
-    else:
-        update.message.reply_text(res.stdout.decode().strip('\n'))
+    update.message.reply_text(res.stdout.decode().strip('\n'))
     return
 #-----------------------POSTGRESQL---------------------
 

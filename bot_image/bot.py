@@ -223,7 +223,13 @@ def getServices(update: Update, context):
 def getReplLogs(update: Update, context):
     logging.debug(f'getReplLogs({update})')
     logger.info(f"/get_repl_logs was executed")
-    return update.message.reply_text(monitoringFunc("cat /var/log/postgresql/postgresql.log | grep repl | tail -n 15")) 
+    command = "cat /var/log/postgresql/postgresql.log | grep repl | tail -n 15" 
+    res = subprocess.run(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    if res.returncode != 0 or res.stderr.decode() != "":
+        return update.message.reply_text(monitoringFunc("cat /var/log/postgresql/postgresql.log | grep repl | tail -n 15")) 
+    else:
+        update.message.reply_text(res.stdout.decode().strip('\n'))
+    return
 #-----------------------POSTGRESQL---------------------
 
 def getEmails(update: Update, context):

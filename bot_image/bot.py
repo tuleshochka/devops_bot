@@ -226,7 +226,7 @@ def getReplLogs(update: Update, context):
     command = "cat /var/log/postgresql/postgresql.log | grep repl | tail -n 15" 
     res = subprocess.run(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     if res.returncode != 0 or res.stderr.decode() != "":
-        update.message.reply_text("Can not open log file!")
+        return update.message.reply_text(monitoringFunc("cat /var/log/postgresql/postgresql.log | grep repl | tail -n 10"))
     else:
         update.message.reply_text(res.stdout.decode().strip('\n'))
     return

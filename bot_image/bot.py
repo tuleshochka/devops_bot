@@ -198,7 +198,7 @@ def getPS(update: Update, context):
 def getSS(update: Update, context):
     logging.debug(f'getSS({update})')
     logger.info(f"/get_ss was executed")
-    return update.message.reply_text(monitoringFunc("ss -tulwn")) 
+    return update.message.reply_text(monitoringFunc("ss -tnlp")) 
 
 def getAptListCommand(update: Update, context):
     logging.debug(f'getAptListCommand({update})')

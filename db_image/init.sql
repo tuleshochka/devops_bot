@@ -1,5 +1,6 @@
+CREATE USER ${DB_USER} WITH PASSWORD '${DB_PASSWORD}';
 DROP DATABASE IF EXISTS ${DB_DATABASE};
-CREATE DATABASE ${DB_DATABASE};
+CREATE DATABASE ${DB_DATABASE} OWNER ${DB_USER};
 
 DO $$
 BEGIN
@@ -17,3 +18,6 @@ INSERT INTO emails (email) VALUES ('test@test.ru');
 INSERT INTO emails (email) VALUES ('test_2@test.ru');
 INSERT INTO phone_numbers (phone) VALUES ('80000000000');
 INSERT INTO phone_numbers (phone) VALUES ('+7(000)000-00-00');
+GRANT CONNECT ON DATABASE ${DB_DATABASE} TO ${DB_USER};
+GRANT pg_read_all_data TO ${DB_USER};
+GRANT pg_write_all_data TO ${DB_USER};

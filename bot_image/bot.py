@@ -168,7 +168,12 @@ def getFree(update: Update, context):
 def getMpstat(update: Update, context):
     logging.debug(f'getMpstat({update})')
     logger.info(f"/get_mpstat was executed")
-    return update.message.reply_text(monitoringFunc("mpstat | head -n 5")) 
+    data = monitoringFunc("mpstat | head -n 5")
+    if data:
+        update.message.reply_text(data)
+    else:
+        update.message.reply_text("mpstat не установлен")
+    return
 
 def getW(update: Update, context):
     logging.debug(f'getW({update})')

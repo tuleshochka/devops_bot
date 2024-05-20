@@ -273,7 +273,7 @@
 
     - name: Clone bot
       ansible.builtin.get_url:
-        url: https://raw.githubusercontent.com/tuleshochka/devops_bot/docker/bot_image/bot.py
+        url: https://raw.githubusercontent.com/tuleshochka/devops_bot/docker/bot/bot.py
         dest: /srv/devops_bot/bot.py
         mode: '0755'
 

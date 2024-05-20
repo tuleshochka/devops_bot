@@ -2,7 +2,7 @@ version: '3'
 services:
   bot:
     image: bot_image
-    build: ./bot_image
+    build: ./bot
     container_name: bot
     depends_on:
       - db
@@ -16,7 +16,7 @@ services:
 
   db:
     image: db_image
-    build: ./db_image
+    build: ./db
     container_name: ${DB_HOST}
     environment:
       - POSTGRES_USER=${DB_USER}
@@ -33,7 +33,7 @@ services:
 
   db_repl:
     image: db_repl_image
-    build: ./db_repl_image
+    build: ./db_repl
     container_name: ${DB_REPL_HOST}
     environment:
       - POSTGRES_USER=${DB_USER}
